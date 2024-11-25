@@ -1,15 +1,41 @@
-import { FormButton, FormInput } from '@/components/auth-form';
+'use client';
 
-export default function Home() {
+import { FormButton, FormInput } from '@/components/auth-form';
+import { useActionState } from 'react';
+import { handleForm } from './action';
+
+export default function Login() {
+	const [state, action] = useActionState(handleForm, null);
+
 	return (
 		<main className='h-screen flex flex-col justify-center items-center gap-y-4 bg-indigo-50'>
 			<h2 className='text-xl font-bold'>Log in</h2>
-			<form action='' className='w-80 flex flex-col gap-y-8'>
-				<FormInput label='Email' placeholder='email' />
-				<FormInput label='Username' placeholder='username' />
-				<FormInput label='Password' placeholder='password' type='password' />
+			<form action={action} className='w-80 flex flex-col gap-y-8'>
+				<FormInput
+					label='Email'
+					placeholder='email'
+					name='email'
+					type='email'
+					defaultValue={(state?.payload.email || '') as string}
+					errorMessage={state?.errors?.fieldErrors.email}
+				/>
+				<FormInput
+					label='Username'
+					placeholder='username'
+					name='username'
+					defaultValue={(state?.payload.username || '') as string}
+					errorMessage={state?.errors?.fieldErrors.username}
+				/>
+				<FormInput
+					label='Password'
+					placeholder='password'
+					name='password'
+					type='password'
+					defaultValue={(state?.payload.password || '') as string}
+					errorMessage={state?.errors?.fieldErrors.password}
+				/>
 
-				<FormButton disabled={true}>Log in</FormButton>
+				<FormButton>Log in</FormButton>
 			</form>
 		</main>
 	);

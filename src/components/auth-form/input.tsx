@@ -2,7 +2,7 @@ import { InputHTMLAttributes } from 'react';
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
 	label?: string;
-	errorMessage?: string;
+	errorMessage?: string[];
 }
 
 export default function Input({ label, errorMessage, ...props }: InputProps) {
@@ -19,7 +19,11 @@ export default function Input({ label, errorMessage, ...props }: InputProps) {
 			)}
 
 			{errorMessage && (
-				<p className='text-xs px-1 mt-1 text-red-500'>{errorMessage}</p>
+				<p className='text-xs px-1 mt-1 text-red-500'>
+					{errorMessage.map((message, index) => (
+						<span key={index}>{message}</span>
+					))}
+				</p>
 			)}
 		</div>
 	);
