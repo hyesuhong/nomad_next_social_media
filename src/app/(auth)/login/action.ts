@@ -26,8 +26,8 @@ export async function handleForm(prevState: unknown, formData: FormData) {
 	const result = formSchema.safeParse(data);
 
 	if (!result.success) {
-		return { status: 400, errors: result.error.flatten(), payload: data };
+		return { status: 400, errors: result.error.flatten() };
 	}
 
-	return { status: 200, payload: data };
+	return { status: 200 };
 }
