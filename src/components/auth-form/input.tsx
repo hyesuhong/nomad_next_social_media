@@ -19,11 +19,11 @@ export default function Input({ label, errorMessage, ...props }: InputProps) {
 			)}
 
 			{errorMessage && (
-				<p className='text-xs px-1 mt-1 text-red-500'>
+				<ul className='flex flex-col gap-y-0.5 text-xs px-1 mt-1 text-red-500'>
 					{errorMessage.map((message, index) => (
-						<span key={index}>{message}</span>
+						<li key={index}>{message}</li>
 					))}
-				</p>
+				</ul>
 			)}
 		</div>
 	);
