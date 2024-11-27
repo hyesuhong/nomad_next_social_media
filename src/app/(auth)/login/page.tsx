@@ -59,7 +59,7 @@ export default function Login() {
 				<FormButton>Log in</FormButton>
 			</Form>
 			{state?.status === 200 && (
-				<div className='flex items-center gap-x-2 w-80 p-4 rounded-md text-sm bg-emerald-500 text-zinc-50'>
+				<div className='flex items-center gap-x-2 w-80 p-4 rounded-md text-sm bg-emerald-500 text-zinc-50 animate-[fade-in_0.3s_ease-in-out]'>
 					<CheckCircleIcon className='w-6 h-6' />
 					Welcome!
 				</div>
