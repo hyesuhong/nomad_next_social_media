@@ -12,18 +12,27 @@ import bcrypt from 'bcrypt';
 import { redirect } from 'next/navigation';
 import { z } from 'zod';
 
-const checkUsernameIsUnique = async (username: string) => {
+const checkEmailIsExist = async (email: string) => {
 	const user = await db.user.findUnique({
-		where: { username },
+		where: { email },
+		select: { id: true },
+	});
+
+	return !!user;
+};
+
+const checkEmailIsUnique = async (email: string) => {
+	const user = await db.user.findUnique({
+		where: { email },
 		select: { id: true },
 	});
 
 	return !user;
 };
 
-const checkEmailIsUnique = async (email: string) => {
+const checkUsernameIsUnique = async (username: string) => {
 	const user = await db.user.findUnique({
-		where: { email },
+		where: { username },
 		select: { id: true },
 	});
 
@@ -39,8 +48,18 @@ const checkPasswordConfirmed = ({
 }) => {
 	return password === confirm_password;
 };
+const logInFormSchema = z.object({
+	email: z
+		.string({ required_error: EMAIL_VALIDATION.required })
+		.email({ message: EMAIL_VALIDATION.format })
+		.refine(
+			checkEmailIsExist,
+			'There is no account registered with this email.'
+		),
+	password: z.string({ required_error: PASSWORD_VALIDATION.required }),
+});
 
-const formSchema = z
+const signUpFormSchema = z
 	.object({
 		username: z
 			.string({ required_error: USERNAME_VALIDATION.required })
@@ -68,7 +87,7 @@ const formSchema = z
 		path: ['confirm_password'],
 	});
 
-export async function createAccount(prevState: unknown, formData: FormData) {
+export const signUp = async (prevState: unknown, formData: FormData) => {
 	const data = {
 		email: formData.get('email') || undefined,
 		username: formData.get('username') || undefined,
@@ -76,13 +95,17 @@ export async function createAccount(prevState: unknown, formData: FormData) {
 		confirm_password: formData.get('confirm_password') || undefined,
 	};
 
-	const result = await formSchema.safeParseAsync(data);
+	const result = await signUpFormSchema.safeParseAsync(data);
 
 	if (!result.success) {
-		return { status: 400, errors: result.error.flatten() };
+		return { errors: result.error.flatten().fieldErrors };
 	}
 
-	const hashedPassword = await bcrypt.hash(result.data.password, 10);
+	const hashedPassword = await bcrypt.hash(
+		result.data.password,
+		process.env.BCRYPT_SALT_ROUNDS!
+	);
+
 	const createdUser = await db.user.create({
 		data: {
 			username: result.data.username,
@@ -100,4 +123,45 @@ export async function createAccount(prevState: unknown, formData: FormData) {
 	await session.save();
 
 	redirect(PAGE_ROUTES.main.path);
-}
+};
+
+export const logIn = async (prevState: unknown, formData: FormData) => {
+	const data = {
+		email: formData.get('email') || undefined,
+		password: formData.get('password') || undefined,
+	};
+
+	const result = await logInFormSchema.safeParseAsync(data);
+
+	if (!result.success) {
+		return { errors: result.error.flatten().fieldErrors };
+	}
+
+	const user = await db.user.findUnique({
+		where: { email: result.data.email },
+		select: { id: true, password: true },
+	});
+
+	const isCorrectPassword = await bcrypt.compare(
+		result.data.password,
+		user?.password || ''
+	);
+
+	if (!isCorrectPassword) {
+		return { errors: { password: ['Wrong password.'], email: undefined } };
+	}
+
+	const session = await getSession();
+
+	session.id = user!.id;
+	await session.save();
+
+	redirect(PAGE_ROUTES.main.path);
+};
+
+export const logOut = async () => {
+	const session = await getSession();
+
+	session.destroy();
+	redirect(PAGE_ROUTES.login.path);
+};

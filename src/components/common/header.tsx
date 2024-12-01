@@ -1,16 +1,6 @@
 import { PAGE_ROUTES } from '@/libs/constants/routes';
-import { getSession } from '@/libs/utils/session';
+import { logOut } from '@/services/auth';
 import Link from 'next/link';
-import { redirect } from 'next/navigation';
-
-async function logOut() {
-	'use server';
-
-	const session = await getSession();
-
-	session.destroy();
-	redirect(PAGE_ROUTES.login.path);
-}
 
 export default function Header() {
 	return (

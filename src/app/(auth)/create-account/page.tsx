@@ -1,11 +1,11 @@
 'use client';
 
 import { FormButton, FormInput, PageSwitch } from '@/components/auth-form';
+import { signUp } from '@/services/auth';
 import { FormEvent, startTransition, useActionState } from 'react';
-import { createAccount } from './action';
 
 export default function CreateAccount() {
-	const [state, action] = useActionState(createAccount, null);
+	const [state, action] = useActionState(signUp, null);
 
 	const handleSubmit = (ev: FormEvent<HTMLFormElement>) => {
 		ev.preventDefault();
@@ -27,27 +27,27 @@ export default function CreateAccount() {
 					placeholder=''
 					type='email'
 					name='email'
-					errorMessage={state?.errors?.fieldErrors.email}
+					errorMessage={state?.errors.email}
 				/>
 				<FormInput
 					label='Username'
 					placeholder=''
 					name='username'
-					errorMessage={state?.errors?.fieldErrors.username}
+					errorMessage={state?.errors.username}
 				/>
 				<FormInput
 					label='Password'
 					placeholder=''
 					type='password'
 					name='password'
-					errorMessage={state?.errors?.fieldErrors.password}
+					errorMessage={state?.errors.password}
 				/>
 				<FormInput
 					label='Confirm password'
 					placeholder=''
 					type='password'
 					name='confirm_password'
-					errorMessage={state?.errors?.fieldErrors.confirm_password}
+					errorMessage={state?.errors.confirm_password}
 				/>
 				<FormButton>Sign up</FormButton>
 			</form>

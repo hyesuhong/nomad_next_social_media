@@ -1,11 +1,11 @@
 'use client';
 
 import { FormButton, FormInput, PageSwitch } from '@/components/auth-form';
+import { logIn } from '@/services/auth';
 import { FormEvent, startTransition, useActionState } from 'react';
-import { handleForm } from './action';
 
 export default function Login() {
-	const [state, action] = useActionState(handleForm, null);
+	const [state, action] = useActionState(logIn, null);
 
 	const handleSubmit = (ev: FormEvent<HTMLFormElement>) => {
 		ev.preventDefault();
@@ -27,14 +27,14 @@ export default function Login() {
 					placeholder='email'
 					name='email'
 					type='email'
-					errorMessage={state?.errors?.fieldErrors.email}
+					errorMessage={state?.errors.email}
 				/>
 				<FormInput
 					label='Password'
 					placeholder='password'
 					name='password'
 					type='password'
-					errorMessage={state?.errors?.fieldErrors.password}
+					errorMessage={state?.errors.password}
 				/>
 
 				<FormButton>Log in</FormButton>
