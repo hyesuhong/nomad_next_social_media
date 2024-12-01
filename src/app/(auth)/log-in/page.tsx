@@ -2,6 +2,7 @@
 
 import { FormButton, FormInput } from '@/components/auth-form';
 import { CheckCircleIcon } from '@heroicons/react/24/outline';
+import Link from 'next/link';
 import { FormEvent, startTransition, useActionState } from 'react';
 import { handleForm } from './action';
 
@@ -46,6 +47,17 @@ export default function Login() {
 
 				<FormButton>Log in</FormButton>
 			</form>
+			<hr className='w-80 border-zinc-200' />
+			<p className='text-sm font-light text-center'>
+				Don't have any account?
+				<br />
+				<Link
+					href='/create-account'
+					className='relative font-medium before:content-[""] before:absolute before:bottom-0 before:left-0 before:w-full before:h-px before:bg-indigo-400 before:scale-x-0 before:transition-transform hover:before:scale-x-100'
+				>
+					Create your account!
+				</Link>
+			</p>
 			{state?.status === 200 && (
 				<div className='flex items-center gap-x-2 w-80 p-4 rounded-md text-sm bg-emerald-500 text-zinc-50 animate-[fade-in_0.3s_ease-in-out]'>
 					<CheckCircleIcon className='w-6 h-6' />
