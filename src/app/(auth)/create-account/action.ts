@@ -5,6 +5,7 @@ import {
 	PASSWORD_VALIDATION,
 	USERNAME_VALIDATION,
 } from '@/libs/constants/auth';
+import { PAGE_ROUTES } from '@/libs/constants/routes';
 import db from '@/services/db';
 import bcrypt from 'bcrypt';
 import { getIronSession } from 'iron-session';
@@ -95,14 +96,13 @@ export async function createAccount(prevState: unknown, formData: FormData) {
 	});
 
 	const cookieStore = await cookies();
-	const cookie = await getIronSession(cookieStore, {
-		cookieName: 'social-media',
+	const cookie = await getIronSession<{ id: string }>(cookieStore, {
+		cookieName: 'social_media_logged_in',
 		password: process.env.COOKIE_PASSWORD!,
 	});
 
-	// @ts-ignore
-	cookie.id = createdUser.id;
+	cookie.id = `${createdUser.id}`;
 	await cookie.save();
 
-	redirect('/');
+	redirect(PAGE_ROUTES.main.path);
 }

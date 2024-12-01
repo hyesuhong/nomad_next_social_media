@@ -1,7 +1,6 @@
 'use client';
 
 import { FormButton, FormInput, PageSwitch } from '@/components/auth-form';
-import { CheckCircleIcon } from '@heroicons/react/24/outline';
 import { FormEvent, startTransition, useActionState } from 'react';
 import { handleForm } from './action';
 
@@ -31,12 +30,6 @@ export default function Login() {
 					errorMessage={state?.errors?.fieldErrors.email}
 				/>
 				<FormInput
-					label='Username'
-					placeholder='username'
-					name='username'
-					errorMessage={state?.errors?.fieldErrors.username}
-				/>
-				<FormInput
 					label='Password'
 					placeholder='password'
 					name='password'
@@ -51,12 +44,6 @@ export default function Login() {
 				message="Don't have an account?"
 				targetUrl={{ label: 'Create account', url: '/create-account' }}
 			/>
-			{state?.status === 200 && (
-				<div className='flex items-center gap-x-2 w-80 p-4 rounded-md text-sm bg-emerald-500 text-zinc-50 animate-[fade-in_0.3s_ease-in-out]'>
-					<CheckCircleIcon className='w-6 h-6' />
-					Welcome!
-				</div>
-			)}
 		</main>
 	);
 }
