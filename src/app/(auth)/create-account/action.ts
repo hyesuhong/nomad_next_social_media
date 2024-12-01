@@ -7,6 +7,9 @@ import {
 } from '@/libs/constants/auth';
 import db from '@/services/db';
 import bcrypt from 'bcrypt';
+import { getIronSession } from 'iron-session';
+import { cookies } from 'next/headers';
+import { redirect } from 'next/navigation';
 import { z } from 'zod';
 
 const checkUsernameIsUnique = async (username: string) => {
@@ -91,5 +94,15 @@ export async function createAccount(prevState: unknown, formData: FormData) {
 		},
 	});
 
-	return { status: 200 };
+	const cookieStore = await cookies();
+	const cookie = await getIronSession(cookieStore, {
+		cookieName: 'social-media',
+		password: process.env.COOKIE_PASSWORD!,
+	});
+
+	// @ts-ignore
+	cookie.id = createdUser.id;
+	await cookie.save();
+
+	redirect('/');
 }
