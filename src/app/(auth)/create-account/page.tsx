@@ -1,7 +1,6 @@
 'use client';
 
-import { FormButton, FormInput } from '@/components/auth-form';
-import Link from 'next/link';
+import { FormButton, FormInput, PageSwitch } from '@/components/auth-form';
 import { FormEvent, startTransition, useActionState } from 'react';
 import { createAccount } from './action';
 
@@ -53,16 +52,10 @@ export default function CreateAccount() {
 				<FormButton>Sign up</FormButton>
 			</form>
 			<hr className='w-80 border-zinc-200' />
-			<p className='text-sm font-light text-center'>
-				Already have an account?
-				<br />
-				<Link
-					href='/log-in'
-					className='relative font-medium before:content-[""] before:absolute before:bottom-0 before:left-0 before:w-full before:h-px before:bg-indigo-400 before:scale-x-0 before:transition-transform hover:before:scale-x-100'
-				>
-					Log in
-				</Link>
-			</p>
+			<PageSwitch
+				message='Already have an account?'
+				targetUrl={{ label: 'Log in', url: '/log-in' }}
+			/>
 		</main>
 	);
 }
