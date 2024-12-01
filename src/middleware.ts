@@ -1,15 +1,10 @@
-import { getIronSession } from 'iron-session';
-import { cookies } from 'next/headers';
 import { notFound } from 'next/navigation';
 import { NextRequest, NextResponse } from 'next/server';
 import { PAGE_ROUTES } from './libs/constants/routes';
+import { getSession } from './libs/utils/session';
 
 export async function middleware(request: NextRequest) {
-	const cookieStore = await cookies();
-	const session = await getIronSession<{ id: string }>(cookieStore, {
-		cookieName: 'social_media_logged_in',
-		password: process.env.COOKIE_PASSWORD!,
-	});
+	const session = await getSession();
 
 	const routeInfo = Object.values(PAGE_ROUTES).find(
 		(route) => route.path === request.nextUrl.pathname

@@ -2,10 +2,9 @@
 
 import { EMAIL_VALIDATION, PASSWORD_VALIDATION } from '@/libs/constants/auth';
 import { PAGE_ROUTES } from '@/libs/constants/routes';
+import { getSession } from '@/libs/utils/session';
 import db from '@/services/db';
 import bcrypt from 'bcrypt';
-import { getIronSession } from 'iron-session';
-import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { z } from 'zod';
 
@@ -60,14 +59,10 @@ export async function handleForm(prevState: unknown, formData: FormData) {
 		};
 	}
 
-	const cookieStore = await cookies();
-	const cookie = await getIronSession<{ id: string }>(cookieStore, {
-		cookieName: 'social_media_logged_in',
-		password: process.env.COOKIE_PASSWORD!,
-	});
+	const session = await getSession();
 
-	cookie.id = `${user!.id}`;
-	await cookie.save();
+	session.id = user!.id;
+	await session.save();
 
 	redirect(PAGE_ROUTES.main.path);
 }
