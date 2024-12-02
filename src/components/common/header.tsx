@@ -4,7 +4,7 @@ import Link from 'next/link';
 
 export default function Header() {
 	return (
-		<header className='h-10 flex justify-between items-center gap-x-4 px-6 text-sm'>
+		<header className='sticky top-0 w-full h-10 flex justify-between items-center gap-x-4 px-6 text-sm'>
 			<h1>
 				<Link href={PAGE_ROUTES.main.path}>Logo</Link>
 			</h1>
