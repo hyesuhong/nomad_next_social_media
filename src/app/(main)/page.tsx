@@ -1,14 +1,22 @@
 import { PostItem } from '@/components/post';
+import { getPosts } from '@/services/post';
 
-const dummyItems = new Array(20).fill(0);
+export default async function Home() {
+	const posts = await getPosts();
+	console.log(posts);
 
-export default function Home() {
 	return (
 		<>
 			<main className='min-h-screen'>
 				<section className='max-w-xl w-full mx-auto px-4 py-8'>
-					{dummyItems.map((_, index) => (
-						<PostItem key={index} />
+					{posts.map((post, index) => (
+						<PostItem
+							key={index}
+							post_id={post.id}
+							created_at={post.created_at}
+							content={post.content}
+							author={post.author}
+						/>
 					))}
 				</section>
 			</main>
