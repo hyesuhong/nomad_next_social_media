@@ -6,9 +6,13 @@ import { getSession } from './libs/utils/session';
 export async function middleware(request: NextRequest) {
 	const session = await getSession();
 
-	const routeInfo = Object.values(PAGE_ROUTES).find(
-		(route) => route.path === request.nextUrl.pathname
-	);
+	const routeInfo = Object.values(PAGE_ROUTES).find((route) => {
+		if (route.pathRegExp) {
+			return route.pathRegExp.exec(request.nextUrl.pathname);
+		}
+
+		return route.path === request.nextUrl.pathname;
+	});
 
 	if (!routeInfo) {
 		return notFound();
