@@ -2,24 +2,35 @@
 
 import db from './db';
 
-export const getPosts = async () => {
+export const getPosts = async (startIndex: number = 0) => {
+	const takeCount = 2;
+	const skipCount = 2 * startIndex;
+
 	const posts = await db.post.findMany({
 		select: {
+			_count: true,
 			id: true,
 			content: true,
+			created_at: true,
 			author: {
 				select: {
 					id: true,
 					username: true,
 				},
 			},
-			created_at: true,
 		},
-		take: 2,
+		skip: skipCount,
+		take: takeCount,
 		orderBy: {
 			created_at: 'desc',
 		},
 	});
 
-	return posts;
+	if (!startIndex) {
+		const totalLength = await db.post.count();
+
+		return { length: totalLength, posts };
+	}
+
+	return { posts };
 };
