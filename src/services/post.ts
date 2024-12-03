@@ -40,3 +40,24 @@ export const getPosts = async (startIndex: number = 1) => {
 		total_results: totalLength,
 	};
 };
+
+export const getPostById = async (id: number) => {
+	const post = await db.post.findFirst({
+		select: {
+			id: true,
+			content: true,
+			created_at: true,
+			author: {
+				select: {
+					id: true,
+					username: true,
+				},
+			},
+		},
+		where: {
+			id,
+		},
+	});
+
+	return post;
+};

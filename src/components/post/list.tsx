@@ -2,7 +2,7 @@
 
 import { getPosts } from '@/services/post';
 import { Post } from '@prisma/client';
-import { MouseEvent, Suspense, useState } from 'react';
+import { MouseEvent, useState } from 'react';
 import Item from './item';
 
 interface PostForList
@@ -47,17 +47,15 @@ export default function List({
 
 	return (
 		<section className='max-w-xl w-full mx-auto px-4 py-8'>
-			<Suspense fallback={<>loading.</>}>
-				{posts.map(({ id, created_at, content, author }) => (
-					<Item
-						key={id}
-						post_id={id}
-						created_at={created_at}
-						content={content}
-						author={author}
-					/>
-				))}
-			</Suspense>
+			{posts.map(({ id, created_at, content, author }) => (
+				<Item
+					key={id}
+					post_id={id}
+					created_at={created_at}
+					content={content}
+					author={author}
+				/>
+			))}
 			<div className='flex justify-center items-center gap-x-4'>
 				{paginations.map((pagination) => (
 					<button
