@@ -2,12 +2,17 @@ import { PostList } from '@/components/post';
 import { getPosts } from '@/services/post';
 
 export default async function Home() {
-	const { length, posts } = await getPosts();
+	const { total_results, total_pages, page, results } = await getPosts();
 
 	return (
 		<>
 			<main className='min-h-screen'>
-				<PostList totalLength={length || 0} initialPosts={posts} />
+				<PostList
+					totalLength={total_results}
+					initialPosts={results}
+					totalPages={total_pages}
+					currentPage={page}
+				/>
 			</main>
 		</>
 	);

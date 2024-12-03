@@ -2,13 +2,20 @@
 
 import db from './db';
 
-export const getPosts = async (startIndex: number = 0) => {
+export const getPosts = async (startIndex: number = 1) => {
 	const takeCount = 2;
-	const skipCount = 2 * startIndex;
+	const skipCount = 2 * (startIndex - 1);
+
+	const totalLength = await db.post.count();
+	const totalPageLength = Math.ceil(totalLength / takeCount);
 
 	const posts = await db.post.findMany({
 		select: {
-			_count: true,
+			_count: {
+				select: {
+					likes: true,
+				},
+			},
 			id: true,
 			content: true,
 			created_at: true,
@@ -26,11 +33,10 @@ export const getPosts = async (startIndex: number = 0) => {
 		},
 	});
 
-	if (!startIndex) {
-		const totalLength = await db.post.count();
-
-		return { length: totalLength, posts };
-	}
-
-	return { posts };
+	return {
+		page: startIndex,
+		results: posts,
+		total_pages: totalPageLength,
+		total_results: totalLength,
+	};
 };
