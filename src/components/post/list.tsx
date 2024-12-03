@@ -22,7 +22,7 @@ interface ListProps {
 
 export default function List({
 	initialPosts,
-	totalLength,
+	// totalLength,
 	totalPages,
 	currentPage,
 }: ListProps) {
