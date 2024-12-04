@@ -1,17 +1,15 @@
 'use client';
 
-import { FormEvent } from 'react';
+import { createPost } from '@/services/post';
+import { useActionState } from 'react';
 
 export default function AddPost() {
-	const handleSubmit = (ev: FormEvent<HTMLFormElement>) => {
-		ev.preventDefault();
-		const { currentTarget } = ev;
-	};
+	const [, action] = useActionState(createPost, null);
 
 	return (
 		<div className='max-w-xl w-full mx-auto p-4'>
 			<form
-				onSubmit={handleSubmit}
+				action={action}
 				className='flex flex-col items-end gap-y-2 border border-zinc-300 p-2'
 			>
 				<textarea
