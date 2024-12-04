@@ -1,4 +1,4 @@
-import { PostList } from '@/components/post';
+import { AddPost, PostList } from '@/components/post';
 import { getPosts } from '@/services/post';
 
 export default async function Home() {
@@ -7,6 +7,7 @@ export default async function Home() {
 	return (
 		<>
 			<main className='min-h-screen'>
+				<AddPost />
 				<PostList
 					totalLength={total_results}
 					initialPosts={results}
