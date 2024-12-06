@@ -15,11 +15,6 @@ export const getPosts = async (startIndex: number = 1) => {
 
 	const posts = await db.post.findMany({
 		select: {
-			_count: {
-				select: {
-					likes: true,
-				},
-			},
 			id: true,
 			content: true,
 			created_at: true,
