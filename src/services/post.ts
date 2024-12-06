@@ -52,6 +52,18 @@ export const getPostById = async (id: number) => {
 					username: true,
 				},
 			},
+			_count: {
+				select: {
+					comments: true,
+					interactions: {
+						where: {
+							kind: {
+								equals: 'LIKE',
+							},
+						},
+					},
+				},
+			},
 		},
 		where: {
 			id,
