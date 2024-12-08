@@ -1,3 +1,5 @@
+import { Comments } from '@/components/comment';
+import { getComments } from '@/services/comment';
 import { getPostById } from '@/services/post';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -10,11 +12,14 @@ interface PostDetailPage {
 
 export default async function PostDetail({ params }: PostDetailPage) {
 	const { id } = await params;
-	const post = await getPostById(+id);
+	const postId = +id;
+	const post = await getPostById(postId);
 
 	if (!post) {
 		notFound();
 	}
+
+	const comments = await getComments(postId);
 
 	return (
 		<main>
@@ -53,33 +58,7 @@ export default async function PostDetail({ params }: PostDetailPage) {
 					</div>
 				</div>
 
-				<form
-					// action={action}
-					className='flex flex-col items-end gap-y-2 border border-zinc-300 p-2'
-				>
-					<textarea
-						name='content'
-						className='w-full h-24 bg-transparent border border-zinc-300 outline-none text-sm p-2 resize-none overflow-x-hidden overflow-y-auto focus:border-indigo-400'
-					></textarea>
-					<button className='bg-zinc-50/50 h-8 px-8 text-sm hover:bg-indigo-300 disabled:bg-zinc-300 disabled:text-zinc-400 disabled:cursor-not-allowed transition-colors'>
-						Reply
-					</button>
-				</form>
-
-				{/* {post._count.comments > 0 && <div>comments</div>} */}
-				<div className='border border-zinc-300'>
-					<dl className='flex gap-x-4 p-2'>
-						<dt>
-							<div className='w-12 h-12 overflow-hidden rounded-full '>
-								<Image src={sampleProfile} alt='' width={50} height={50} />
-							</div>
-						</dt>
-						<dd>
-							<h4>username</h4>
-							<p>comment</p>
-						</dd>
-					</dl>
-				</div>
+				<Comments postId={postId} initialComments={comments} />
 			</section>
 		</main>
 	);
