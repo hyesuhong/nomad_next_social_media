@@ -110,3 +110,47 @@ export const createPost = async (prevState: unknown, formData: FormData) => {
 
 	redirect(PAGE_ROUTES.post_detail.generator!(newPost.id));
 };
+
+const searchSchema = z.object({
+	keyword: z.string().min(1, 'Keyword should be at least 1 character.'),
+});
+
+export const searchPostByKeyword = async (
+	prevState: unknown,
+	formData: FormData
+) => {
+	const data = {
+		keyword: formData.get('keyword'),
+	};
+
+	const result = searchSchema.safeParse(data);
+
+	if (!result.success) {
+		return { errors: result.error.flatten().fieldErrors };
+	}
+
+	const matchedPosts = await db.post.findMany({
+		where: {
+			content: {
+				contains: result.data.keyword,
+				// mode: 'insensitive'
+			},
+		},
+		select: {
+			id: true,
+			content: true,
+			created_at: true,
+			author: {
+				select: {
+					id: true,
+					username: true,
+				},
+			},
+		},
+		orderBy: {
+			created_at: 'desc',
+		},
+	});
+
+	return { results: matchedPosts };
+};
