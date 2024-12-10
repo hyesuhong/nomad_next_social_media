@@ -8,7 +8,8 @@
 		"start": "next start",
 		"lint": "next lint",
 		"prepare": "husky",
-		"format": "prettier --cache --write 'src/**/*.{js,jsx,ts,tsx}'"
+		"format": "prettier --cache --write 'src/**/*.{js,jsx,ts,tsx}'",
+		"db:migrate": "prisma migrate dev"
 	},
 	"lint-staged": {
 		"src/**/*.{js,jsx,ts,tsx}": "pnpm format"
