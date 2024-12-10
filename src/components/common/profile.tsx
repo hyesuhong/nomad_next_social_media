@@ -11,7 +11,7 @@ const initialSize = {
 
 interface ProfileProps {
 	name: string;
-	imageUrl?: string;
+	imageUrl?: string | null;
 	size?: 'small' | 'medium' | 'large';
 }
 
