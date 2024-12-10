@@ -1,8 +1,10 @@
 'use client';
 
+import { PAGE_ROUTES } from '@/libs/constants/routes';
 import { createComment } from '@/services/comment';
 import { Comment } from '@prisma/client';
 import Image from 'next/image';
+import Link from 'next/link';
 import { useOptimistic } from 'react';
 import sampleProfile from '../../../public/sample_profile.jpeg';
 import Form from './form';
@@ -47,21 +49,39 @@ export default function Comments({ postId, initialComments }: CommentsProps) {
 
 			{optimisticComments.length > 0 && (
 				<div className='border border-zinc-300'>
-					{optimisticComments.map((comment) => (
-						<dl className='flex gap-x-4 p-2' key={comment.id}>
-							<dt>
-								<div className='w-12 h-12 overflow-hidden rounded-full '>
-									<Image src={sampleProfile} alt='' width={50} height={50} />
-								</div>
-							</dt>
-							<dd>
-								<h4>{comment.user.username}</h4>
-								<p>{comment.content}</p>
-							</dd>
-						</dl>
-					))}
+					{optimisticComments.map((comment) => {
+						const userDetailRoute = getUserDetailRoute(comment.user.username);
+						return (
+							<dl className='flex gap-x-4 p-2' key={comment.id}>
+								<dt>
+									<div className='w-12 h-12 overflow-hidden rounded-full '>
+										<Link href={userDetailRoute}>
+											<Image
+												src={sampleProfile}
+												alt=''
+												width={50}
+												height={50}
+											/>
+										</Link>
+									</div>
+								</dt>
+								<dd>
+									<h4>
+										<Link href={userDetailRoute}>{comment.user.username}</Link>
+									</h4>
+									<p>{comment.content}</p>
+								</dd>
+							</dl>
+						);
+					})}
 				</div>
 			)}
 		</>
 	);
 }
+
+const getUserDetailRoute = (username: string) => {
+	return PAGE_ROUTES.users_detail.generator
+		? PAGE_ROUTES.users_detail.generator(username)
+		: '';
+};
