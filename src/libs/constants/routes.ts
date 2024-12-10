@@ -18,4 +18,9 @@ export const PAGE_ROUTES: Record<string, Route> = {
 		isPrivate: true,
 		generator: (id: number) => `/posts/${id}`,
 	},
+	search: {
+		name: 'Search',
+		path: '/search',
+		isPrivate: true,
+	},
 };

@@ -9,6 +9,7 @@ export default function Header() {
 				<Link href={PAGE_ROUTES.main.path}>Logo</Link>
 			</h1>
 			<nav className='flex items-center gap-x-4'>
+				<Link href={PAGE_ROUTES.search.path}>{PAGE_ROUTES.search.name}</Link>
 				<Link href={PAGE_ROUTES.profile.path}>{PAGE_ROUTES.profile.name}</Link>
 				<form action={logOut}>
 					<button>Logout</button>
