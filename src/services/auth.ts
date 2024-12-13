@@ -114,12 +114,14 @@ export const signUp = async (prevState: unknown, formData: FormData) => {
 		},
 		select: {
 			id: true,
+			username: true,
 		},
 	});
 
 	const session = await getSession();
 
 	session.id = createdUser.id;
+	session.username = createdUser.username;
 	await session.save();
 
 	redirect(PAGE_ROUTES.main.path);
@@ -139,7 +141,7 @@ export const logIn = async (prevState: unknown, formData: FormData) => {
 
 	const user = await db.user.findUnique({
 		where: { email: result.data.email },
-		select: { id: true, password: true },
+		select: { id: true, password: true, username: true },
 	});
 
 	const isCorrectPassword = await bcrypt.compare(
@@ -154,6 +156,7 @@ export const logIn = async (prevState: unknown, formData: FormData) => {
 	const session = await getSession();
 
 	session.id = user!.id;
+	session.username = user!.username;
 	await session.save();
 
 	redirect(PAGE_ROUTES.main.path);

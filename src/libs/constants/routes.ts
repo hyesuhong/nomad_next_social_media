@@ -30,4 +30,11 @@ export const PAGE_ROUTES: Record<string, Route> = {
 		isPrivate: true,
 		generator: (username) => `/users/${username}`,
 	},
+	users_detail_edit: {
+		name: `Edit specify user's profile`,
+		path: 'users/:username/edit',
+		pathRegExp: /(\/users){1}\/\w\/edit/,
+		isPrivate: true,
+		generator: (username) => `/users/${username}/edit`,
+	},
 };

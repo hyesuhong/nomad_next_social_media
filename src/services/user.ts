@@ -31,3 +31,17 @@ export const getUserByUsername = async (username: string) => {
 
 	return { ...user, isLoggedInUser };
 };
+
+export async function getLoggedInUser() {
+	const session = await getSession();
+
+	if (!session.id) {
+		notFound();
+	}
+
+	const user = await db.user.findUnique({
+		where: { id: Number(session.id) },
+	});
+
+	return user || notFound();
+}
