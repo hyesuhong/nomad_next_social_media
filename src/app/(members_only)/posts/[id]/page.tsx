@@ -1,5 +1,6 @@
 import { Comments } from '@/components/comment';
 import { LikeButton } from '@/components/post';
+import { PAGE_ROUTES } from '@/libs/constants/routes';
 import { getComments } from '@/services/comment';
 import { getLikeStatus } from '@/services/interaction';
 import { getPostById } from '@/services/post';
@@ -24,12 +25,16 @@ export default async function PostDetail({ params }: PostDetailPage) {
 	const comments = await getComments(postId);
 	const likeStatus = await getLikeStatus(postId);
 
+	const userDetailRoute = PAGE_ROUTES.users_detail.generator
+		? PAGE_ROUTES.users_detail.generator(post.author.username)
+		: '';
+
 	return (
 		<main>
 			<section className='max-w-xl w-full mx-auto px-4 py-8'>
 				<div className='grid grid-cols-[max-content_minmax(0,_1fr)] gap-x-4 gap-y-2 p-4 border border-zinc-300'>
 					<Link
-						href={`/profile/${post.author.id}`}
+						href={userDetailRoute}
 						className='grid grid-cols-subgrid col-span-2 items-center'
 					>
 						<div className='w-12 h-12 overflow-hidden rounded-full '>

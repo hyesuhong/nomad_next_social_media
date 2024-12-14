@@ -3,6 +3,7 @@ import { cookies } from 'next/headers';
 
 interface SessionContent {
 	id?: number;
+	username?: string;
 }
 
 export async function getSession() {

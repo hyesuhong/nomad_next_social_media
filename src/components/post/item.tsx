@@ -18,9 +18,16 @@ export default function Item({ post_id, content, author }: ItemProps) {
 		? PAGE_ROUTES.post_detail.generator(post_id)
 		: '';
 
+	const userDetailRoute = PAGE_ROUTES.users_detail.generator
+		? PAGE_ROUTES.users_detail.generator(author.username)
+		: '';
+
 	return (
 		<div className='grid grid-cols-[max-content_minmax(0,_1fr)] grid-rows-[repeat(2,_max-content)] gap-x-4 gap-y-2 p-4 border border-zinc-300 mb-4 last:mb-0'>
-			<Link href='' className='grid grid-cols-subgrid col-span-2 items-center'>
+			<Link
+				href={userDetailRoute}
+				className='grid grid-cols-subgrid col-span-2 items-center'
+			>
 				<div className='w-12 h-12 overflow-hidden rounded-full '>
 					<Image src={sampleProfile} alt='' width={50} height={50} />
 				</div>

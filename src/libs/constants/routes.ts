@@ -3,7 +3,7 @@ type Route = {
 	path: string;
 	pathRegExp?: RegExp;
 	isPrivate: boolean;
-	generator?: (id: number) => string;
+	generator?: <T>(param: T) => string;
 };
 
 export const PAGE_ROUTES: Record<string, Route> = {
@@ -16,11 +16,25 @@ export const PAGE_ROUTES: Record<string, Route> = {
 		path: '/posts/:id',
 		pathRegExp: /(\/posts){1}\/\d+/,
 		isPrivate: true,
-		generator: (id: number) => `/posts/${id}`,
+		generator: (id) => `/posts/${id}`,
 	},
 	search: {
 		name: 'Search',
 		path: '/search',
 		isPrivate: true,
+	},
+	users_detail: {
+		name: 'A user detail',
+		path: '/users/:username',
+		pathRegExp: /(\/users){1}\/\w/,
+		isPrivate: true,
+		generator: (username) => `/users/${username}`,
+	},
+	users_detail_edit: {
+		name: `Edit specify user's profile`,
+		path: 'users/:username/edit',
+		pathRegExp: /(\/users){1}\/\w\/edit/,
+		isPrivate: true,
+		generator: (username) => `/users/${username}/edit`,
 	},
 };

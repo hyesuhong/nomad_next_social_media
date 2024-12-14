@@ -21,7 +21,7 @@ const checkEmailIsExist = async (email: string) => {
 	return !!user;
 };
 
-const checkEmailIsUnique = async (email: string) => {
+export const checkEmailIsUnique = async (email: string) => {
 	const user = await db.user.findUnique({
 		where: { email },
 		select: { id: true },
@@ -30,7 +30,7 @@ const checkEmailIsUnique = async (email: string) => {
 	return !user;
 };
 
-const checkUsernameIsUnique = async (username: string) => {
+export const checkUsernameIsUnique = async (username: string) => {
 	const user = await db.user.findUnique({
 		where: { username },
 		select: { id: true },
@@ -39,7 +39,7 @@ const checkUsernameIsUnique = async (username: string) => {
 	return !user;
 };
 
-const checkPasswordConfirmed = ({
+export const checkPasswordConfirmed = async ({
 	password,
 	confirm_password,
 }: {
@@ -48,6 +48,7 @@ const checkPasswordConfirmed = ({
 }) => {
 	return password === confirm_password;
 };
+
 const logInFormSchema = z.object({
 	email: z
 		.string({ required_error: EMAIL_VALIDATION.required })
@@ -114,12 +115,14 @@ export const signUp = async (prevState: unknown, formData: FormData) => {
 		},
 		select: {
 			id: true,
+			username: true,
 		},
 	});
 
 	const session = await getSession();
 
 	session.id = createdUser.id;
+	session.username = createdUser.username;
 	await session.save();
 
 	redirect(PAGE_ROUTES.main.path);
@@ -139,7 +142,7 @@ export const logIn = async (prevState: unknown, formData: FormData) => {
 
 	const user = await db.user.findUnique({
 		where: { email: result.data.email },
-		select: { id: true, password: true },
+		select: { id: true, password: true, username: true },
 	});
 
 	const isCorrectPassword = await bcrypt.compare(
@@ -154,6 +157,7 @@ export const logIn = async (prevState: unknown, formData: FormData) => {
 	const session = await getSession();
 
 	session.id = user!.id;
+	session.username = user!.username;
 	await session.save();
 
 	redirect(PAGE_ROUTES.main.path);
