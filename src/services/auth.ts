@@ -21,7 +21,7 @@ const checkEmailIsExist = async (email: string) => {
 	return !!user;
 };
 
-const checkEmailIsUnique = async (email: string) => {
+export const checkEmailIsUnique = async (email: string) => {
 	const user = await db.user.findUnique({
 		where: { email },
 		select: { id: true },
@@ -30,7 +30,7 @@ const checkEmailIsUnique = async (email: string) => {
 	return !user;
 };
 
-const checkUsernameIsUnique = async (username: string) => {
+export const checkUsernameIsUnique = async (username: string) => {
 	const user = await db.user.findUnique({
 		where: { username },
 		select: { id: true },
@@ -39,7 +39,7 @@ const checkUsernameIsUnique = async (username: string) => {
 	return !user;
 };
 
-const checkPasswordConfirmed = ({
+export const checkPasswordConfirmed = async ({
 	password,
 	confirm_password,
 }: {
@@ -48,6 +48,7 @@ const checkPasswordConfirmed = ({
 }) => {
 	return password === confirm_password;
 };
+
 const logInFormSchema = z.object({
 	email: z
 		.string({ required_error: EMAIL_VALIDATION.required })
