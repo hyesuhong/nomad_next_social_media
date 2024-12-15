@@ -5,10 +5,6 @@ import { revalidatePath } from 'next/cache';
 import { notFound } from 'next/navigation';
 import db from './db';
 
-const INTERACTION_KIND = {
-	like: 'LIKE',
-};
-
 export const getLikeStatus = async (postId: number) => {
 	const session = await getSession();
 
@@ -16,19 +12,18 @@ export const getLikeStatus = async (postId: number) => {
 		notFound();
 	}
 
-	const isLiked = await db.interaction.findUnique({
+	const isLiked = await db.like.findUnique({
 		where: {
-			user_id_post_id_kind: {
-				post_id: postId,
+			user_id_post_id: {
 				user_id: session.id,
-				kind: INTERACTION_KIND.like,
+				post_id: postId,
 			},
 		},
 	});
-	const likeCount = await db.interaction.count({
+
+	const likeCount = await db.like.count({
 		where: {
 			post_id: postId,
-			kind: INTERACTION_KIND.like,
 		},
 	});
 
@@ -42,11 +37,10 @@ export const likePost = async (postId: number) => {
 		notFound();
 	}
 
-	await db.interaction.create({
+	await db.like.create({
 		data: {
 			post_id: postId,
 			user_id: session.id,
-			kind: INTERACTION_KIND.like,
 		},
 	});
 
@@ -60,12 +54,11 @@ export const dislikePost = async (postId: number) => {
 		notFound();
 	}
 
-	await db.interaction.delete({
+	await db.like.delete({
 		where: {
-			user_id_post_id_kind: {
+			user_id_post_id: {
 				post_id: postId,
 				user_id: session.id,
-				kind: INTERACTION_KIND.like,
 			},
 		},
 	});

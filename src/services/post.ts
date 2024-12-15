@@ -10,13 +10,23 @@ export const getPosts = async (startIndex: number = 1) => {
 	const session = await getSession();
 
 	if (!session.id) {
-		return { errors: { auth: 'Unauthorized' } };
+		throw new Error('Unauthorized');
 	}
 
 	const takeCount = 10;
 	const skipCount = 10 * (startIndex - 1);
 
 	const totalLength = await db.post.count();
+
+	if (totalLength < 1) {
+		return {
+			page: startIndex,
+			results: [],
+			total_pages: 1,
+			total_results: totalLength,
+		};
+	}
+
 	const totalPageLength = Math.ceil(totalLength / takeCount);
 
 	const posts = await db.post.findMany({
@@ -30,24 +40,17 @@ export const getPosts = async (startIndex: number = 1) => {
 					username: true,
 				},
 			},
-			interactions: {
-				select: { user_id: true, post_id: true },
+			likes: {
 				where: {
-					user_id: session.id,
-					kind: {
-						equals: 'LIKE',
+					user_id: {
+						equals: session.id,
 					},
 				},
+				select: { created_at: true },
 			},
 			_count: {
 				select: {
-					interactions: {
-						where: {
-							kind: {
-								equals: 'LIKE',
-							},
-						},
-					},
+					likes: true,
 					comments: true,
 				},
 			},
@@ -93,13 +96,7 @@ export const getPostById = async (id: number) => {
 			_count: {
 				select: {
 					comments: true,
-					interactions: {
-						where: {
-							kind: {
-								equals: 'LIKE',
-							},
-						},
-					},
+					likes: true,
 				},
 			},
 		},
@@ -195,24 +192,17 @@ export const searchPostByKeyword = async (
 					username: true,
 				},
 			},
-			interactions: {
-				select: { user_id: true, post_id: true },
+			likes: {
 				where: {
-					user_id: session.id,
-					kind: {
-						equals: 'LIKE',
+					user_id: {
+						equals: session.id,
 					},
 				},
+				select: { created_at: true },
 			},
 			_count: {
 				select: {
-					interactions: {
-						where: {
-							kind: {
-								equals: 'LIKE',
-							},
-						},
-					},
+					likes: true,
 					comments: true,
 				},
 			},

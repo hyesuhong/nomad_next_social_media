@@ -8,28 +8,29 @@ datasource db {
 }
 
 model User {
-  id           Int           @id @default(autoincrement())
-  username     String        @unique
-  password     String
-  email        String        @unique
-  bio          String?
-  profile      String?
-  created_at   DateTime      @default(now())
-  updated_at   DateTime      @updatedAt
-  posts        Post[]
-  comments     Comment[]
-  interactions Interaction[]
+  id         Int      @id @default(autoincrement())
+  username   String   @unique
+  password   String
+  email      String   @unique
+  bio        String?
+  profile    String?
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  posts    Post[]
+  comments Comment[]
+  likes    Like[]
 }
 
 model Post {
-  id           Int           @id @default(autoincrement())
-  content      String
-  created_at   DateTime      @default(now())
-  updated_at   DateTime      @updatedAt
-  author       User          @relation(fields: [author_id], references: [id], onDelete: Cascade)
-  author_id    Int
-  comments     Comment[]
-  interactions Interaction[]
+  id         Int       @id @default(autoincrement())
+  content    String
+  created_at DateTime  @default(now())
+  updated_at DateTime  @updatedAt
+  author     User      @relation(fields: [author_id], references: [id], onDelete: Cascade)
+  author_id  Int
+  comments   Comment[]
+  likes      Like[]
 }
 
 model Comment {
@@ -43,19 +44,12 @@ model Comment {
   post_id    Int
 }
 
-model Interaction {
+model Like {
   created_at DateTime @default(now())
-  kind       String
   user       User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
   user_id    Int
   post       Post     @relation(fields: [post_id], references: [id], onDelete: Cascade)
   post_id    Int
 
-  @@id([user_id, post_id, kind])
+  @@id([user_id, post_id])
 }
-
-// TODO: apply enum to Interaction's kind, after changing DB connector
-// enum InteractionKind {
-//   LIKE
-//   BOOKMARK  
-// }

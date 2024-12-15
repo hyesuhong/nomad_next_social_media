@@ -15,9 +15,9 @@ interface ItemProps {
 	content: string;
 	created_at: Date;
 	post_id: number;
-	isLiked: boolean;
+	isLiked?: boolean;
 	_count: {
-		interactions: number;
+		likes: number;
 		comments: number;
 	};
 	hasAction?: boolean;
@@ -60,7 +60,7 @@ export default function Item({
 					<div className='col-span-2 flex items-center gap-x-2'>
 						<LikeButton
 							postId={post_id}
-							likeCount={_count.interactions}
+							likeCount={_count.likes}
 							isLiked={isLiked}
 						/>
 						<CommentButton postId={post_id} count={_count.comments} />

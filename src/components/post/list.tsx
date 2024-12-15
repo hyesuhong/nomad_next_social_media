@@ -16,9 +16,11 @@ interface PostForList
 		id: number;
 		username: string;
 	};
-	interactions: { user_id: number; post_id: number }[];
+	likes: {
+		created_at: Date;
+	}[];
 	_count: {
-		interactions: number;
+		likes: number;
 		comments: number;
 	};
 }
@@ -63,13 +65,8 @@ export default function List({
 	return (
 		<section className='pt-4 pb-20'>
 			{posts.length > 0 ? (
-				posts.map(({ id, interactions, ...rest }) => (
-					<Item
-						key={id}
-						post_id={id}
-						isLiked={interactions.length > 0}
-						{...rest}
-					/>
+				posts.map(({ id, likes, ...rest }) => (
+					<Item key={id} post_id={id} isLiked={likes.length > 0} {...rest} />
 				))
 			) : (
 				<p className='text-xs text-grey-light px-6 text-center'>

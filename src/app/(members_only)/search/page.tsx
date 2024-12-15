@@ -54,7 +54,7 @@ export default function Search() {
 								author={post.author}
 								created_at={post.created_at}
 								_count={post._count}
-								isLiked={post.interactions.length > 0}
+								isLiked={post.likes.length > 0}
 								key={post.id}
 							/>
 						))}

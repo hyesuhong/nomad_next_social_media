@@ -11,7 +11,7 @@ export default function ErrorPage({
 }) {
 	return (
 		<main className='min-h-screen max-w-md w-full mx-auto flex flex-col items-center justify-center px-6'>
-			<h1 className='text-3xl font-bold text-grey-light'>
+			<h1 className='text-xl font-bold text-grey-light'>
 				Something went wrong!
 			</h1>
 			<p className='mt-2 mb-8'>{error.message}</p>

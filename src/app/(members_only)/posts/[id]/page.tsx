@@ -32,7 +32,7 @@ export default async function PostDetail({ params }: PostDetailPage) {
 					isLiked={likeStatus.isLiked}
 					isOwner={post.isOwner}
 					_count={{
-						interactions: likeStatus.likeCount,
+						likes: likeStatus.likeCount,
 						comments: comments.length,
 					}}
 					hasAction
