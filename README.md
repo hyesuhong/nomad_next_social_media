@@ -1,36 +1,76 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Social media(with Next.js)
 
-## Getting Started
+[Demo](https://nomad-next-social-media.vercel.app/)
 
-First, run the development server:
+## How to run in local
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+1. Clone this repository
+
+```shell
+git clone https://github.com/hyesuhong/nomad_next_social_media.git
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. Intall dependencies
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```shell
+pnpm install
+# or
+npm install
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+3. Set `.env`
 
-## Learn More
+   - DATABASE_URL
+   - DIRECT_URL
+   - BCRYPT_SALT_ROUNDS
+   - COOKIE_PASSWORD
 
-To learn more about Next.js, take a look at the following resources:
+4. Run the development server
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```shell
+pnpm dev
+# or
+npm run dev
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+<!-- ## User flow -->
 
-## Deploy on Vercel
+<!-- image -->
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Features
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- authentication
+- post
+- comment
+- like / dislike
+
+## Next plans
+
+### More features
+
+- authentication with github, google, kakao
+- upload image(post, comment, user's profile...)
+- edit/delete (post, comment)
+
+### To fix
+
+- like/dislike's optimistic update & caching
+- server actions' error handling
+
+## Tech stacks
+
+### Language
+![Typescript](https://img.shields.io/badge/Typescript-000000?style=flat-square&logo=Typescript&logoColor=3178C6)
+
+### Frontend
+![ReactJS](https://img.shields.io/badge/React.js-000000?style=flat-square&logo=React&logoColor=61DAFB)
+![NextJS](https://img.shields.io/badge/Next.js-000000?style=flat-square&logo=Nextdotjs&logoColor=white)
+![TailwindCss](https://img.shields.io/badge/TailwindCss-000000?style=flat-square&logo=tailwindcss&logoColor=06B6D4)
+![Zod](https://img.shields.io/badge/Zod-000000?style=flat-square&logo=zod&logoColor=3E67B1)
+
+### Database
+![Prisma](https://img.shields.io/badge/Prisma-000000?style=flat-square&logo=prisma&logoColor=white)
+![Supabase](https://img.shields.io/badge/Supabase-000000?style=flat-square&logo=supabase&logoColor=3FCF8E)
+
+### Deployment
+![Vercel](https://img.shields.io/badge/Vercel-000000?style=flat-square&logo=vercel&logoColor=white)
