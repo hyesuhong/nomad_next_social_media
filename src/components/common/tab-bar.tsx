@@ -1,12 +1,12 @@
 'use client';
 
-import { IcoHomeOutline, IcoPlus, IcoUser } from '@/assets/icons';
+import { IcoHomeOutline, IcoSearch, IcoUser } from '@/assets/icons';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
 const tabBarLinks = [
 	{ href: '/', icon: <IcoHomeOutline /> },
-	{ href: '/upload', icon: <IcoPlus /> },
+	{ href: '/search', icon: <IcoSearch /> },
 	{ href: '/profile', icon: <IcoUser /> },
 ];
 
