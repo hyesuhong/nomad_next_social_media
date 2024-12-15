@@ -6,15 +6,15 @@ export default async function Home() {
 
 	return (
 		<>
-			<main className='min-h-screen'>
-				<AddPost />
+			<AddPost />
+			{results && (
 				<PostList
 					totalLength={total_results}
 					initialPosts={results}
 					totalPages={total_pages}
 					currentPage={page}
 				/>
-			</main>
+			)}
 		</>
 	);
 }

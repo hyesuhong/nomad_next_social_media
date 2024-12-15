@@ -16,7 +16,7 @@ const buttonSizeVariants: Record<ButtonSize, string> = {
 	full: 'w-full h-10 rounded-[4px] text-sm',
 	large: 'h-10 px-6 rounded-[4px] text-sm',
 	medium: 'h-8 px-4 rounded-[4px] text-sm',
-	small: 'h-6 px-3 rounded-[4px] text-xs',
+	small: 'h-6 px-2 rounded-[4px] text-xs',
 };
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
@@ -29,11 +29,14 @@ export default function Button({
 	size = 'full',
 	disabled,
 	children,
+	className,
+	...props
 }: ButtonProps) {
 	return (
 		<button
 			disabled={disabled}
-			className={`${buttonColorVariants[level]} ${buttonSizeVariants[size]} transition-colors disabled:cursor-not-allowed`}
+			className={`${buttonColorVariants[level]} ${buttonSizeVariants[size]} transition-colors disabled:cursor-not-allowed ${className}`}
+			{...props}
 		>
 			{children}
 		</button>

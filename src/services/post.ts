@@ -7,6 +7,12 @@ import { z } from 'zod';
 import db from './db';
 
 export const getPosts = async (startIndex: number = 1) => {
+	const session = await getSession();
+
+	if (!session.id) {
+		return { errors: { auth: 'Unauthorized' } };
+	}
+
 	const takeCount = 2;
 	const skipCount = 2 * (startIndex - 1);
 
@@ -24,6 +30,27 @@ export const getPosts = async (startIndex: number = 1) => {
 					username: true,
 				},
 			},
+			interactions: {
+				select: { user_id: true, post_id: true },
+				where: {
+					user_id: session.id,
+					kind: {
+						equals: 'LIKE',
+					},
+				},
+			},
+			_count: {
+				select: {
+					interactions: {
+						where: {
+							kind: {
+								equals: 'LIKE',
+							},
+						},
+					},
+					comments: true,
+				},
+			},
 		},
 		skip: skipCount,
 		take: takeCount,
@@ -32,9 +59,14 @@ export const getPosts = async (startIndex: number = 1) => {
 		},
 	});
 
+	const postsWithOwner = posts.map((data) => ({
+		isOwner: data.author.id === session.id,
+		...data,
+	}));
+
 	return {
 		page: startIndex,
-		results: posts,
+		results: postsWithOwner,
 		total_pages: totalPageLength,
 		total_results: totalLength,
 	};

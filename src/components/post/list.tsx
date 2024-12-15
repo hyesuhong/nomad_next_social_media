@@ -7,9 +7,15 @@ import Item from './item';
 
 interface PostForList
 	extends Omit<Post, 'updated_at' | 'author' | 'author_id'> {
+	isOwner: boolean;
 	author: {
 		id: number;
 		username: string;
+	};
+	interactions: { user_id: number; post_id: number }[];
+	_count: {
+		interactions: number;
+		comments: number;
 	};
 }
 
@@ -41,20 +47,16 @@ export default function List({
 		const targetPage = Number(dataset.page || 1);
 		const { results, page } = await getPosts(targetPage);
 
-		setPosts(results);
-		setPage(page);
+		if (results) {
+			setPosts(results);
+			setPage(page);
+		}
 	};
 
 	return (
 		<section className='max-w-xl w-full mx-auto px-4 py-8'>
-			{posts.map(({ id, created_at, content, author }) => (
-				<Item
-					key={id}
-					post_id={id}
-					created_at={created_at}
-					content={content}
-					author={author}
-				/>
+			{posts.map(({ id, ...rest }) => (
+				<Item key={id} post_id={id} {...rest} />
 			))}
 			<div className='flex justify-center items-center gap-x-4'>
 				{paginations.map((pagination) => (
