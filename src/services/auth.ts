@@ -104,7 +104,7 @@ export const signUp = async (prevState: unknown, formData: FormData) => {
 
 	const hashedPassword = await bcrypt.hash(
 		result.data.password,
-		process.env.BCRYPT_SALT_ROUNDS!
+		Number(process.env.BCRYPT_SALT_ROUNDS!)
 	);
 
 	const createdUser = await db.user.create({

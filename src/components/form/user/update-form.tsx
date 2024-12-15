@@ -16,7 +16,7 @@ interface UpdateFormProps {
 }
 
 export default function UpdateForm({ user }: UpdateFormProps) {
-	const [state, action] = useActionState(updateUserInfo, null);
+	const [, action] = useActionState(updateUserInfo, null);
 
 	const handleSubmit = (ev: FormEvent<HTMLFormElement>) => {
 		ev.preventDefault();

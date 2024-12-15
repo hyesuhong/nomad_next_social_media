@@ -53,7 +53,7 @@ export const useIntersection = <T extends HTMLElement>({
 		if (observer && ref.current) observer.observe(ref.current);
 
 		return () => {
-			observer && observer.disconnect();
+			observer?.disconnect();
 		};
 	}, [ref, intersectionHandler, intersectionOpt]);
 	return ref;

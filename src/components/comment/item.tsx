@@ -10,12 +10,7 @@ interface ItemProps {
 	createdAt: Date;
 }
 
-export default function Item({
-	userId,
-	username,
-	comment,
-	createdAt,
-}: ItemProps) {
+export default function Item({ username, comment, createdAt }: ItemProps) {
 	const userDetailRoute = PAGE_ROUTES.users_detail.generator
 		? PAGE_ROUTES.users_detail.generator(username)
 		: '';
