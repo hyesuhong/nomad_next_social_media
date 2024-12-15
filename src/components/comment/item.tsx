@@ -1,4 +1,5 @@
 import { PAGE_ROUTES } from '@/libs/constants/routes';
+import { formatDate } from '@/libs/utils/format';
 import Link from 'next/link';
 import { Profile } from '../common';
 
@@ -27,9 +28,7 @@ export default function Item({
 				<h4 className='text-sm'>
 					<Link href={userDetailRoute}>{username}</Link>
 				</h4>
-				<span className='text-xs text-grey-light'>
-					{createdAt.toDateString()}
-				</span>
+				<span className='text-xs text-grey-light'>{formatDate(createdAt)}</span>
 				<p className='col-span-2 mt-1'>{comment}</p>
 			</div>
 		</div>

@@ -44,19 +44,25 @@ export default function Comments({ postId, initialComments }: CommentsProps) {
 		<>
 			<CommentCreateForm postId={postId} commentAction={commentAction} />
 
-			{optimisticComments.length > 0 && (
-				<article className='pt-4 pb-20'>
-					{optimisticComments.map((comment) => (
-						<Item
-							key={comment.id}
-							userId={comment.user.id}
-							username={comment.user.username}
-							createdAt={comment.created_at}
-							comment={comment.content}
-						/>
-					))}
-				</article>
-			)}
+			<article className='pt-4 pb-20'>
+				<>
+					{optimisticComments.length > 0 ? (
+						optimisticComments.map((comment) => (
+							<Item
+								key={comment.id}
+								userId={comment.user.id}
+								username={comment.user.username}
+								createdAt={comment.created_at}
+								comment={comment.content}
+							/>
+						))
+					) : (
+						<p className='text-xs text-grey-light px-6 text-center'>
+							There are no comments.
+						</p>
+					)}
+				</>
+			</article>
 		</>
 	);
 }

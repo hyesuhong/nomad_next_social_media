@@ -62,14 +62,20 @@ export default function List({
 
 	return (
 		<section className='pt-4 pb-20'>
-			{posts.map(({ id, interactions, ...rest }) => (
-				<Item
-					key={id}
-					post_id={id}
-					isLiked={interactions.length > 0}
-					{...rest}
-				/>
-			))}
+			{posts.length > 0 ? (
+				posts.map(({ id, interactions, ...rest }) => (
+					<Item
+						key={id}
+						post_id={id}
+						isLiked={interactions.length > 0}
+						{...rest}
+					/>
+				))
+			) : (
+				<p className='text-xs text-grey-light px-6 text-center'>
+					There are no posts.
+				</p>
+			)}
 			{page !== totalPages && <div ref={ref} style={{ height: 50 }}></div>}
 		</section>
 	);
