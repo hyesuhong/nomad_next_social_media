@@ -1,7 +1,13 @@
 import { UserUpdateForm } from '@/components/form';
-import { getLoggedInUser } from '@/services/user';
+import { getLoggedInUser, validateLoggedInUser } from '@/services/user';
 
-export default async function UserEdit() {
+export default async function UserEdit({
+	params,
+}: {
+	params: Promise<{ username: string }>;
+}) {
+	const { username } = await params;
+	await validateLoggedInUser(username);
 	const user = await getLoggedInUser();
 
 	return (

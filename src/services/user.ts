@@ -16,6 +16,20 @@ import {
 } from './auth';
 import db from './db';
 
+export const validateLoggedInUser = async (username: string) => {
+	const session = await getSession();
+
+	if (!session.id) {
+		notFound();
+	}
+
+	if (session.username !== username) {
+		throw new Error('Unauthorized');
+	}
+
+	return session.username === username;
+};
+
 export const getUserByUsername = async (username: string) => {
 	const session = await getSession();
 
@@ -173,7 +187,6 @@ export async function updateUserInfo(prevState: unknown, formData: FormData) {
 	const result = await userInfoUpdateSchema.safeParseAsync(data);
 
 	if (!result.success) {
-		console.log(result.error?.flatten().fieldErrors);
 		return { errors: result.error.flatten().fieldErrors };
 	}
 
