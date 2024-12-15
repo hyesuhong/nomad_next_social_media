@@ -173,11 +173,16 @@ export const searchPostByKeyword = async (
 		return { errors: result.error.flatten().fieldErrors };
 	}
 
+	const session = await getSession();
+
+	if (!session.id) {
+		return { errors: { auth: 'Unauthorized' } };
+	}
+
 	const matchedPosts = await db.post.findMany({
 		where: {
 			content: {
 				contains: result.data.keyword,
-				// mode: 'insensitive'
 			},
 		},
 		select: {
@@ -188,6 +193,27 @@ export const searchPostByKeyword = async (
 				select: {
 					id: true,
 					username: true,
+				},
+			},
+			interactions: {
+				select: { user_id: true, post_id: true },
+				where: {
+					user_id: session.id,
+					kind: {
+						equals: 'LIKE',
+					},
+				},
+			},
+			_count: {
+				select: {
+					interactions: {
+						where: {
+							kind: {
+								equals: 'LIKE',
+							},
+						},
+					},
+					comments: true,
 				},
 			},
 		},

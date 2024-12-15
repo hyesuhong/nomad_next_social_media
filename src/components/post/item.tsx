@@ -7,7 +7,7 @@ import LikeButton from './like-button';
 import OwnerButton from './owner-button';
 
 interface ItemProps {
-	isOwner: boolean;
+	isOwner?: boolean;
 	author: {
 		id: number;
 		username: string;
@@ -29,7 +29,7 @@ export default function Item({
 	author,
 	isLiked,
 	_count,
-	isOwner,
+	isOwner = false,
 }: ItemProps) {
 	const postDetailRoute = PAGE_ROUTES.post_detail.generator
 		? PAGE_ROUTES.post_detail.generator(post_id)
