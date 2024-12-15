@@ -14,8 +14,8 @@ export default function TabBar() {
 	const pathname = usePathname();
 
 	return (
-		<div className='fixed bottom-0 left-0 w-full'>
-			<ul className='flex max-w-md w-full h-16 mx-auto'>
+		<div className='fixed bottom-0 left-0 w-full bg-neutral'>
+			<ul className='flex max-w-md w-full h-16 mx-auto border-t border-t-grey-lightest'>
 				{tabBarLinks.map((link, index) => (
 					<li key={index} className='flex-1 flex items-center justify-center'>
 						<Link
