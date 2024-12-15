@@ -1,4 +1,5 @@
-import { AddPost, PostList } from '@/components/post';
+import { PostCreateForm } from '@/components/form';
+import { PostList } from '@/components/post';
 import { getPosts } from '@/services/post';
 
 export default async function Home() {
@@ -6,7 +7,7 @@ export default async function Home() {
 
 	return (
 		<>
-			<AddPost />
+			<PostCreateForm />
 			{results && (
 				<PostList
 					totalLength={total_results}

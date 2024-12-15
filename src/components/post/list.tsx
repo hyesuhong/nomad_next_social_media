@@ -61,7 +61,7 @@ export default function List({
 	});
 
 	return (
-		<section className='pt-8 pb-20'>
+		<section className='pt-4 pb-20'>
 			{posts.map(({ id, interactions, ...rest }) => (
 				<Item
 					key={id}

@@ -3,7 +3,7 @@
 import { createComment } from '@/services/comment';
 import { Comment } from '@prisma/client';
 import { useOptimistic } from 'react';
-import Form from './form';
+import { CommentCreateForm } from '../form';
 import Item from './item';
 
 type CommentForList = Omit<Comment, 'user_id' | 'post_id' | 'updated_at'> & {
@@ -42,9 +42,7 @@ export default function Comments({ postId, initialComments }: CommentsProps) {
 
 	return (
 		<>
-			<article>
-				<Form postId={postId} commentAction={commentAction} />
-			</article>
+			<CommentCreateForm postId={postId} commentAction={commentAction} />
 
 			{optimisticComments.length > 0 && (
 				<article className='pt-4 pb-20'>
