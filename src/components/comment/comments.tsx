@@ -1,13 +1,10 @@
 'use client';
 
-import { PAGE_ROUTES } from '@/libs/constants/routes';
 import { createComment } from '@/services/comment';
 import { Comment } from '@prisma/client';
-import Image from 'next/image';
-import Link from 'next/link';
 import { useOptimistic } from 'react';
-import sampleProfile from '../../../public/sample_profile.jpeg';
 import Form from './form';
+import Item from './item';
 
 type CommentForList = Omit<Comment, 'user_id' | 'post_id' | 'updated_at'> & {
 	user: { id: number; username: string };
@@ -45,43 +42,23 @@ export default function Comments({ postId, initialComments }: CommentsProps) {
 
 	return (
 		<>
-			<Form postId={postId} commentAction={commentAction} />
+			<article>
+				<Form postId={postId} commentAction={commentAction} />
+			</article>
 
 			{optimisticComments.length > 0 && (
-				<div className='border border-zinc-300'>
-					{optimisticComments.map((comment) => {
-						const userDetailRoute = getUserDetailRoute(comment.user.username);
-						return (
-							<dl className='flex gap-x-4 p-2' key={comment.id}>
-								<dt>
-									<div className='w-12 h-12 overflow-hidden rounded-full '>
-										<Link href={userDetailRoute}>
-											<Image
-												src={sampleProfile}
-												alt=''
-												width={50}
-												height={50}
-											/>
-										</Link>
-									</div>
-								</dt>
-								<dd>
-									<h4>
-										<Link href={userDetailRoute}>{comment.user.username}</Link>
-									</h4>
-									<p>{comment.content}</p>
-								</dd>
-							</dl>
-						);
-					})}
-				</div>
+				<article className='pt-4 pb-20'>
+					{optimisticComments.map((comment) => (
+						<Item
+							key={comment.id}
+							userId={comment.user.id}
+							username={comment.user.username}
+							createdAt={comment.created_at}
+							comment={comment.content}
+						/>
+					))}
+				</article>
 			)}
 		</>
 	);
 }
-
-const getUserDetailRoute = (username: string) => {
-	return PAGE_ROUTES.users_detail.generator
-		? PAGE_ROUTES.users_detail.generator(username)
-		: '';
-};
