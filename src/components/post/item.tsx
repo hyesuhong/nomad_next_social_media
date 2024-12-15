@@ -14,7 +14,7 @@ interface ItemProps {
 	content: string;
 	created_at: Date;
 	post_id: number;
-	interactions: { user_id: number; post_id: number }[];
+	isLiked: boolean;
 	_count: {
 		interactions: number;
 		comments: number;
@@ -26,7 +26,7 @@ export default function Item({
 	content,
 	created_at,
 	author,
-	interactions,
+	isLiked,
 	_count,
 	isOwner,
 }: ItemProps) {
@@ -57,7 +57,7 @@ export default function Item({
 					<LikeButton
 						postId={post_id}
 						likeCount={_count.interactions}
-						isLiked={interactions.length > 0}
+						isLiked={isLiked}
 					/>
 					<CommentButton postId={post_id} count={_count.comments} />
 

@@ -61,9 +61,14 @@ export default function List({
 	});
 
 	return (
-		<section className='max-w-xl w-full mx-auto px-4 pt-8 pb-20'>
-			{posts.map(({ id, ...rest }) => (
-				<Item key={id} post_id={id} {...rest} />
+		<section className='pt-8 pb-20'>
+			{posts.map(({ id, interactions, ...rest }) => (
+				<Item
+					key={id}
+					post_id={id}
+					isLiked={interactions.length > 0}
+					{...rest}
+				/>
 			))}
 			{page !== totalPages && <div ref={ref} style={{ height: 50 }}></div>}
 		</section>

@@ -73,6 +73,12 @@ export const getPosts = async (startIndex: number = 1) => {
 };
 
 export const getPostById = async (id: number) => {
+	const session = await getSession();
+
+	if (!session.id) {
+		return null;
+	}
+
 	const post = await db.post.findFirst({
 		select: {
 			id: true,
@@ -102,7 +108,13 @@ export const getPostById = async (id: number) => {
 		},
 	});
 
-	return post;
+	if (!post) {
+		return post;
+	}
+
+	const postWithOwner = { isOwner: session.id === post.author.id, ...post };
+
+	return postWithOwner;
 };
 
 const postScheme = z.object({
