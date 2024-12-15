@@ -5,6 +5,6 @@
 @layer base {
 	html,
 	body {
-		@apply bg-neutral;
+		@apply bg-neutral text-grey-dark;
 	}
 }

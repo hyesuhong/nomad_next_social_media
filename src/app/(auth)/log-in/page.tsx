@@ -19,9 +19,12 @@ export default function Login() {
 	};
 
 	return (
-		<main className='h-screen flex flex-col justify-center items-center gap-y-8 bg-indigo-50'>
-			<h2 className='text-xl font-bold'>Log in</h2>
-			<form onSubmit={handleSubmit} className='w-80 flex flex-col gap-y-6'>
+		<>
+			<h2 className='text-xl font-bold mb-2'>Log in</h2>
+			<form
+				onSubmit={handleSubmit}
+				className='w-full flex flex-col gap-y-6 [&_button]:mt-4'
+			>
 				<FormInput
 					label='Email'
 					placeholder='email'
@@ -39,11 +42,11 @@ export default function Login() {
 
 				<FormButton>Log in</FormButton>
 			</form>
-			<hr className='w-80 border-zinc-200' />
+
 			<PageSwitch
 				message="Don't have an account?"
 				targetUrl={{ label: 'Create account', url: '/create-account' }}
 			/>
-		</main>
+		</>
 	);
 }
