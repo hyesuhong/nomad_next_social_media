@@ -1,6 +1,6 @@
 'use client';
 
-import { FormButton, FormInput, PageSwitch } from '@/components/auth-form';
+import { AuthInput, AuthPageSwitch, SubmitButton } from '@/components/form';
 import { signUp } from '@/services/auth';
 import { FormEvent, startTransition, useActionState } from 'react';
 
@@ -22,37 +22,37 @@ export default function CreateAccount() {
 		<>
 			<h2 className='text-xl font-bold'>Sign up</h2>
 			<form onSubmit={handleSubmit} className='w-80 flex flex-col gap-y-6'>
-				<FormInput
+				<AuthInput
 					label='Email'
 					placeholder=''
 					type='email'
 					name='email'
 					errorMessage={state?.errors.email}
 				/>
-				<FormInput
+				<AuthInput
 					label='Username'
 					placeholder=''
 					name='username'
 					errorMessage={state?.errors.username}
 				/>
-				<FormInput
+				<AuthInput
 					label='Password'
 					placeholder=''
 					type='password'
 					name='password'
 					errorMessage={state?.errors.password}
 				/>
-				<FormInput
+				<AuthInput
 					label='Confirm password'
 					placeholder=''
 					type='password'
 					name='confirm_password'
 					errorMessage={state?.errors.confirm_password}
 				/>
-				<FormButton>Sign up</FormButton>
+				<SubmitButton>Sign up</SubmitButton>
 			</form>
 
-			<PageSwitch
+			<AuthPageSwitch
 				message='Already have an account?'
 				targetUrl={{ label: 'Log in', url: '/log-in' }}
 			/>

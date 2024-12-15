@@ -1,6 +1,6 @@
 'use client';
 
-import { FormButton, FormInput, PageSwitch } from '@/components/auth-form';
+import { AuthInput, AuthPageSwitch, SubmitButton } from '@/components/form';
 import { logIn } from '@/services/auth';
 import { FormEvent, startTransition, useActionState } from 'react';
 
@@ -25,14 +25,14 @@ export default function Login() {
 				onSubmit={handleSubmit}
 				className='w-full flex flex-col gap-y-6 [&_button]:mt-4'
 			>
-				<FormInput
+				<AuthInput
 					label='Email'
 					placeholder='email'
 					name='email'
 					type='email'
 					errorMessage={state?.errors.email}
 				/>
-				<FormInput
+				<AuthInput
 					label='Password'
 					placeholder='password'
 					name='password'
@@ -40,10 +40,10 @@ export default function Login() {
 					errorMessage={state?.errors.password}
 				/>
 
-				<FormButton>Log in</FormButton>
+				<SubmitButton>Log in</SubmitButton>
 			</form>
 
-			<PageSwitch
+			<AuthPageSwitch
 				message="Don't have an account?"
 				targetUrl={{ label: 'Create account', url: '/create-account' }}
 			/>

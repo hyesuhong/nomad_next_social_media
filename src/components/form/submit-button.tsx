@@ -2,7 +2,7 @@ import { PropsWithChildren } from 'react';
 import { useFormStatus } from 'react-dom';
 import { Button } from '../common';
 
-export default function AuthButton({ children }: PropsWithChildren) {
+export default function SubmitButton({ children }: PropsWithChildren) {
 	const { pending } = useFormStatus();
 
 	return (
