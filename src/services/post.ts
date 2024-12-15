@@ -13,8 +13,8 @@ export const getPosts = async (startIndex: number = 1) => {
 		return { errors: { auth: 'Unauthorized' } };
 	}
 
-	const takeCount = 2;
-	const skipCount = 2 * (startIndex - 1);
+	const takeCount = 10;
+	const skipCount = 10 * (startIndex - 1);
 
 	const totalLength = await db.post.count();
 	const totalPageLength = Math.ceil(totalLength / takeCount);

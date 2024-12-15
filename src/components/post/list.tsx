@@ -1,8 +1,12 @@
 'use client';
 
+import {
+	IntersectionHandler,
+	useIntersection,
+} from '@/libs/hooks/use-intersection';
 import { getPosts } from '@/services/post';
 import { Post } from '@prisma/client';
-import { MouseEvent, useState } from 'react';
+import { useState } from 'react';
 import Item from './item';
 
 interface PostForList
@@ -28,48 +32,40 @@ interface ListProps {
 
 export default function List({
 	initialPosts,
-	// totalLength,
 	totalPages,
 	currentPage,
 }: ListProps) {
 	const [posts, setPosts] = useState(initialPosts);
 	const [page, setPage] = useState(currentPage);
 
-	const paginations = new Array(totalPages)
-		.fill(0)
-		.map((_, index) => index + 1);
-
-	const onButtonClick = async (ev: MouseEvent<HTMLButtonElement>) => {
-		const {
-			currentTarget: { dataset },
-		} = ev;
-
-		const targetPage = Number(dataset.page || 1);
-		const { results, page } = await getPosts(targetPage);
+	const getNextPage = async (page: number) => {
+		const targetPage = page + 1;
+		const { results, page: nextPage } = await getPosts(targetPage);
 
 		if (results) {
-			setPosts(results);
-			setPage(page);
+			setPosts((posts) => [...posts, ...results]);
+			setPage(nextPage);
 		}
 	};
 
+	const callbackIntersection: IntersectionHandler = ([entry], observer) => {
+		const { isIntersecting, target } = entry;
+		if (isIntersecting) {
+			observer.unobserve(target);
+			getNextPage(page);
+		}
+	};
+
+	const ref = useIntersection<HTMLDivElement>({
+		callbackIntersection,
+	});
+
 	return (
-		<section className='max-w-xl w-full mx-auto px-4 py-8'>
+		<section className='max-w-xl w-full mx-auto px-4 pt-8 pb-20'>
 			{posts.map(({ id, ...rest }) => (
 				<Item key={id} post_id={id} {...rest} />
 			))}
-			<div className='flex justify-center items-center gap-x-4'>
-				{paginations.map((pagination) => (
-					<button
-						key={pagination}
-						data-page={pagination}
-						className={`w-6 h-6 text-xs ${pagination === page ? 'text-indigo-500 font-medium' : 'text-zinc-400 hover:text-zinc-700'} transition-colors`}
-						onClick={onButtonClick}
-					>
-						{pagination}
-					</button>
-				))}
-			</div>
+			{page !== totalPages && <div ref={ref} style={{ height: 50 }}></div>}
 		</section>
 	);
 }
