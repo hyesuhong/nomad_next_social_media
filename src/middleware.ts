@@ -1,4 +1,3 @@
-import { notFound } from 'next/navigation';
 import { NextRequest, NextResponse } from 'next/server';
 import { PAGE_ROUTES } from './libs/constants/routes';
 import { getSession } from './libs/utils/session';
@@ -14,19 +13,19 @@ export async function middleware(request: NextRequest) {
 		return route.path === request.nextUrl.pathname;
 	});
 
-	if (!routeInfo) {
-		return notFound();
-	}
-
-	if (!session.id) {
-		if (routeInfo.isPrivate) {
-			return NextResponse.redirect(
-				new URL(PAGE_ROUTES.login.path, request.url)
-			);
-		}
-	} else {
-		if (!routeInfo.isPrivate) {
-			return NextResponse.redirect(new URL(PAGE_ROUTES.main.path, request.url));
+	if (routeInfo) {
+		if (!session.id) {
+			if (routeInfo.isPrivate) {
+				return NextResponse.redirect(
+					new URL(PAGE_ROUTES.login.path, request.url)
+				);
+			}
+		} else {
+			if (!routeInfo.isPrivate) {
+				return NextResponse.redirect(
+					new URL(PAGE_ROUTES.main.path, request.url)
+				);
+			}
 		}
 	}
 }

@@ -7,8 +7,14 @@ import { z } from 'zod';
 import db from './db';
 
 export const getPosts = async (startIndex: number = 1) => {
-	const takeCount = 2;
-	const skipCount = 2 * (startIndex - 1);
+	const session = await getSession();
+
+	if (!session.id) {
+		return { errors: { auth: 'Unauthorized' } };
+	}
+
+	const takeCount = 10;
+	const skipCount = 10 * (startIndex - 1);
 
 	const totalLength = await db.post.count();
 	const totalPageLength = Math.ceil(totalLength / takeCount);
@@ -24,6 +30,27 @@ export const getPosts = async (startIndex: number = 1) => {
 					username: true,
 				},
 			},
+			interactions: {
+				select: { user_id: true, post_id: true },
+				where: {
+					user_id: session.id,
+					kind: {
+						equals: 'LIKE',
+					},
+				},
+			},
+			_count: {
+				select: {
+					interactions: {
+						where: {
+							kind: {
+								equals: 'LIKE',
+							},
+						},
+					},
+					comments: true,
+				},
+			},
 		},
 		skip: skipCount,
 		take: takeCount,
@@ -32,15 +59,26 @@ export const getPosts = async (startIndex: number = 1) => {
 		},
 	});
 
+	const postsWithOwner = posts.map((data) => ({
+		isOwner: data.author.id === session.id,
+		...data,
+	}));
+
 	return {
 		page: startIndex,
-		results: posts,
+		results: postsWithOwner,
 		total_pages: totalPageLength,
 		total_results: totalLength,
 	};
 };
 
 export const getPostById = async (id: number) => {
+	const session = await getSession();
+
+	if (!session.id) {
+		return null;
+	}
+
 	const post = await db.post.findFirst({
 		select: {
 			id: true,
@@ -70,7 +108,13 @@ export const getPostById = async (id: number) => {
 		},
 	});
 
-	return post;
+	if (!post) {
+		return post;
+	}
+
+	const postWithOwner = { isOwner: session.id === post.author.id, ...post };
+
+	return postWithOwner;
 };
 
 const postScheme = z.object({
@@ -129,11 +173,16 @@ export const searchPostByKeyword = async (
 		return { errors: result.error.flatten().fieldErrors };
 	}
 
+	const session = await getSession();
+
+	if (!session.id) {
+		return { errors: { auth: 'Unauthorized' } };
+	}
+
 	const matchedPosts = await db.post.findMany({
 		where: {
 			content: {
 				contains: result.data.keyword,
-				// mode: 'insensitive'
 			},
 		},
 		select: {
@@ -144,6 +193,27 @@ export const searchPostByKeyword = async (
 				select: {
 					id: true,
 					username: true,
+				},
+			},
+			interactions: {
+				select: { user_id: true, post_id: true },
+				where: {
+					user_id: session.id,
+					kind: {
+						equals: 'LIKE',
+					},
+				},
+			},
+			_count: {
+				select: {
+					interactions: {
+						where: {
+							kind: {
+								equals: 'LIKE',
+							},
+						},
+					},
+					comments: true,
 				},
 			},
 		},

@@ -8,10 +8,21 @@ export default {
 	],
 	theme: {
 		extend: {
-			keyframes: {
-				'fade-in': {
-					'0%': { opacity: '0' },
-					'100%': { opacity: '1' },
+			fontFamily: {
+				sans: ['var(--font-pretendard)'],
+			},
+			colors: {
+				neutral: '#F2F5FF',
+				grey: {
+					dark: '#393939',
+					light: '#9E9E9E',
+					lightest: '#E3E3E3',
+				},
+				primary: {
+					default: '#6F89DD',
+					hover: '#5472D4',
+					active: '#3757C0',
+					disabled: '#CBCEDA',
 				},
 			},
 		},

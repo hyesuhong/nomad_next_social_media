@@ -8,12 +8,11 @@ interface PageSwitchProps {
 export default function PageSwitch({ message, targetUrl }: PageSwitchProps) {
 	return (
 		<>
-			<p className='text-sm font-light text-center'>
-				{message}
-				<br />
+			<p className='text-sm font-light text-center mt-auto'>
+				{`${message} `}
 				<Link
 					href={targetUrl.url}
-					className='relative font-medium transition-colors hover:text-indigo-400'
+					className='relative font-medium transition-colors hover:text-primary-default'
 				>
 					{targetUrl.label}
 				</Link>

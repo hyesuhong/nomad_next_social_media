@@ -1,15 +1,25 @@
 'use client';
 
+import {
+	IntersectionHandler,
+	useIntersection,
+} from '@/libs/hooks/use-intersection';
 import { getPosts } from '@/services/post';
 import { Post } from '@prisma/client';
-import { MouseEvent, useState } from 'react';
+import { useState } from 'react';
 import Item from './item';
 
 interface PostForList
 	extends Omit<Post, 'updated_at' | 'author' | 'author_id'> {
+	isOwner: boolean;
 	author: {
 		id: number;
 		username: string;
+	};
+	interactions: { user_id: number; post_id: number }[];
+	_count: {
+		interactions: number;
+		comments: number;
 	};
 }
 
@@ -22,52 +32,51 @@ interface ListProps {
 
 export default function List({
 	initialPosts,
-	// totalLength,
 	totalPages,
 	currentPage,
 }: ListProps) {
 	const [posts, setPosts] = useState(initialPosts);
 	const [page, setPage] = useState(currentPage);
 
-	const paginations = new Array(totalPages)
-		.fill(0)
-		.map((_, index) => index + 1);
+	const getNextPage = async (page: number) => {
+		const targetPage = page + 1;
+		const { results, page: nextPage } = await getPosts(targetPage);
 
-	const onButtonClick = async (ev: MouseEvent<HTMLButtonElement>) => {
-		const {
-			currentTarget: { dataset },
-		} = ev;
-
-		const targetPage = Number(dataset.page || 1);
-		const { results, page } = await getPosts(targetPage);
-
-		setPosts(results);
-		setPage(page);
+		if (results) {
+			setPosts((posts) => [...posts, ...results]);
+			setPage(nextPage);
+		}
 	};
 
+	const callbackIntersection: IntersectionHandler = ([entry], observer) => {
+		const { isIntersecting, target } = entry;
+		if (isIntersecting) {
+			observer.unobserve(target);
+			getNextPage(page);
+		}
+	};
+
+	const ref = useIntersection<HTMLDivElement>({
+		callbackIntersection,
+	});
+
 	return (
-		<section className='max-w-xl w-full mx-auto px-4 py-8'>
-			{posts.map(({ id, created_at, content, author }) => (
-				<Item
-					key={id}
-					post_id={id}
-					created_at={created_at}
-					content={content}
-					author={author}
-				/>
-			))}
-			<div className='flex justify-center items-center gap-x-4'>
-				{paginations.map((pagination) => (
-					<button
-						key={pagination}
-						data-page={pagination}
-						className={`w-6 h-6 text-xs ${pagination === page ? 'text-indigo-500 font-medium' : 'text-zinc-400 hover:text-zinc-700'} transition-colors`}
-						onClick={onButtonClick}
-					>
-						{pagination}
-					</button>
-				))}
-			</div>
+		<section className='pt-4 pb-20'>
+			{posts.length > 0 ? (
+				posts.map(({ id, interactions, ...rest }) => (
+					<Item
+						key={id}
+						post_id={id}
+						isLiked={interactions.length > 0}
+						{...rest}
+					/>
+				))
+			) : (
+				<p className='text-xs text-grey-light px-6 text-center'>
+					There are no posts.
+				</p>
+			)}
+			{page !== totalPages && <div ref={ref} style={{ height: 50 }}></div>}
 		</section>
 	);
 }

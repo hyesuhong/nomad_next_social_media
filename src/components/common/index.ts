@@ -1,4 +1,6 @@
-import Header from './header';
+import Button from './button';
+import LoadingScreen from './loading-screen';
 import Profile from './profile';
+import TabBar from './tab-bar';
 
-export { Header, Profile };
+export { Button, LoadingScreen, Profile, TabBar };

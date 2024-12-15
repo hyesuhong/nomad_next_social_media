@@ -9,11 +9,18 @@ const initialSize = {
 	height: 0,
 };
 
+type ProfileSize = 'small' | 'medium' | 'large';
 interface ProfileProps {
 	name: string;
 	imageUrl?: string | null;
-	size?: 'small' | 'medium' | 'large';
+	size?: ProfileSize;
 }
+
+const profileSizeVariants: Record<ProfileSize, string> = {
+	small: 'size-6',
+	medium: 'size-8',
+	large: 'size-20',
+};
 
 export default function Profile({
 	name,
@@ -36,7 +43,7 @@ export default function Profile({
 	return (
 		<>
 			<div
-				className={`${size === 'small' ? 'size-12' : size === 'medium' ? 'size-14' : 'size-20'} border border-zinc-500 rounded-full overflow-hidden [&_svg]:size-full [&_svg]:translate-y-[10%]`}
+				className={`${profileSizeVariants[size]} border border-zinc-500 rounded-full overflow-hidden [&_svg]:size-full [&_svg]:translate-y-[10%]`}
 			>
 				{imageUrl ? (
 					<Image

@@ -11,16 +11,27 @@ export default async function ProfilePage() {
 
 	return (
 		<>
-			<main className=''>
-				<section className='relative grid grid-cols-[max-content_minmax(0,_1fr)] items-end max-w-xl w-full'>
-					<Profile name={user.username} imageUrl={user.profile} size='large' />
-					<h2>{user.username}</h2>
-					{user.bio && <p>{user.bio}</p>}
-					<Link href={userEditRoute} className='absolute top-0 right-0'>
-						edit profile
-					</Link>
-				</section>
-			</main>
+			<section className='flex flex-col items-center gap-y-1 pt-8 pb-4 px-6 border-b border-b-grey-lightest'>
+				<Profile name={user.username} imageUrl={user.profile} size='large' />
+				<h2 className='text-base mt-3'>{user.username}</h2>
+				{user.bio && <p className='text-sm text-grey-light'>{user.bio}</p>}
+				<Link
+					href={userEditRoute}
+					className='text-sm self-end text-grey-light hover:text-grey-dark mt-4'
+				>
+					edit profile
+				</Link>
+			</section>
+			<section className='pb-20'>
+				<ul className='flex h-8 border-b border-b-grey-lightest'>
+					<li className='flex-1 flex items-center justify-center text-sm text-grey-light'>
+						Posts
+					</li>
+					<li className='flex-1 flex items-center justify-center text-sm text-grey-light'>
+						Likes
+					</li>
+				</ul>
+			</section>
 		</>
 	);
 }

@@ -3,6 +3,7 @@
 import { IcoHeartOutline, IcoHeartSolid } from '@/assets/icons';
 import { dislikePost, likePost } from '@/services/interaction';
 import { startTransition, useOptimistic } from 'react';
+import { Button } from '../common';
 
 interface LikeButtonProps {
 	likeCount?: number;
@@ -38,12 +39,14 @@ export default function LikeButton({
 	};
 
 	return (
-		<button
+		<Button
 			onClick={handleClick}
-			className={`flex items-center gap-x-1 h-8 px-2 text-sm ${isLiked ? 'text-red-400' : 'text-zinc-500 hover:text-red-400'} transition-colors [&_svg]:w-4 [&_svg]:h-4`}
+			size='small'
+			level='ghost'
+			className='flex items-center gap-x-1 [&_svg]:size-4'
 		>
 			{optimisticState.isLiked ? <IcoHeartSolid /> : <IcoHeartOutline />}
 			<span>{optimisticState.likeCount}</span>
-		</button>
+		</Button>
 	);
 }

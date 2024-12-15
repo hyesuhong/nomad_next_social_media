@@ -1,11 +1,11 @@
-import { Header } from '@/components/common';
+import { TabBar } from '@/components/common';
 import { PropsWithChildren } from 'react';
 
 export default function MainLayout({ children }: PropsWithChildren) {
 	return (
 		<>
-			<Header />
-			{children}
+			<main className='min-h-screen max-w-md w-full mx-auto'>{children}</main>
+			<TabBar />
 		</>
 	);
 }
