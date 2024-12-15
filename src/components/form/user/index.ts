@@ -1,3 +1,3 @@
 import UpdateForm from './update-form';
 
-export { UpdateForm };
+export { UpdateForm as UserUpdateForm };
