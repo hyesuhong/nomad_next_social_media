@@ -20,6 +20,7 @@ interface ItemProps {
 		interactions: number;
 		comments: number;
 	};
+	hasAction?: boolean;
 }
 
 export default function Item({
@@ -30,6 +31,7 @@ export default function Item({
 	isLiked,
 	_count,
 	isOwner = false,
+	hasAction,
 }: ItemProps) {
 	const postDetailRoute = PAGE_ROUTES.post_detail.generator
 		? PAGE_ROUTES.post_detail.generator(post_id)
@@ -54,16 +56,18 @@ export default function Item({
 				<p className='col-span-2 mt-1 mb-4'>
 					<Link href={postDetailRoute}>{content}</Link>
 				</p>
-				<div className='col-span-2 flex items-center gap-x-2'>
-					<LikeButton
-						postId={post_id}
-						likeCount={_count.interactions}
-						isLiked={isLiked}
-					/>
-					<CommentButton postId={post_id} count={_count.comments} />
+				{hasAction && (
+					<div className='col-span-2 flex items-center gap-x-2'>
+						<LikeButton
+							postId={post_id}
+							likeCount={_count.interactions}
+							isLiked={isLiked}
+						/>
+						<CommentButton postId={post_id} count={_count.comments} />
 
-					{isOwner && <OwnerButton />}
-				</div>
+						{isOwner && <OwnerButton />}
+					</div>
+				)}
 			</div>
 		</div>
 	);

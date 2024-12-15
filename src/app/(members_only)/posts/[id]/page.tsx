@@ -35,6 +35,7 @@ export default async function PostDetail({ params }: PostDetailPage) {
 						interactions: likeStatus.likeCount,
 						comments: comments.length,
 					}}
+					hasAction
 				/>
 			</section>
 			<section>
