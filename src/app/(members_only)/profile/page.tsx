@@ -1,10 +1,13 @@
 import { Profile } from '@/components/common';
+import { PostItem } from '@/components/post';
 import { PAGE_ROUTES } from '@/libs/constants/routes';
+import { getPostsByUserId } from '@/services/post';
 import { getLoggedInUser } from '@/services/user';
 import Link from 'next/link';
 
 export default async function ProfilePage() {
 	const user = await getLoggedInUser();
+	const posts = await getPostsByUserId(user.id);
 	const userEditRoute = PAGE_ROUTES.users_detail_edit.generator
 		? PAGE_ROUTES.users_detail_edit.generator(user.username)
 		: '';
@@ -23,14 +26,24 @@ export default async function ProfilePage() {
 				</Link>
 			</section>
 			<section className='pb-20'>
-				<ul className='flex h-8 border-b border-b-grey-lightest'>
-					<li className='flex-1 flex items-center justify-center text-sm text-grey-light'>
-						Posts
-					</li>
-					<li className='flex-1 flex items-center justify-center text-sm text-grey-light'>
-						Likes
-					</li>
-				</ul>
+				{posts.length > 0 ? (
+					<>
+						{posts.map((post) => (
+							<PostItem
+								post_id={post.id}
+								content={post.content}
+								author={post.author}
+								created_at={post.created_at}
+								_count={post._count}
+								key={post.id}
+							/>
+						))}
+					</>
+				) : (
+					<p className='text-xs text-grey-light px-6 text-center'>
+						Let&apos;s write your first post!
+					</p>
+				)}
 			</section>
 		</>
 	);

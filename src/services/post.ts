@@ -214,3 +214,33 @@ export const searchPostByKeyword = async (
 
 	return { results: matchedPosts };
 };
+
+export const getPostsByUserId = async (userId: number) => {
+	const posts = await db.post.findMany({
+		select: {
+			id: true,
+			content: true,
+			created_at: true,
+			author: {
+				select: {
+					id: true,
+					username: true,
+				},
+			},
+			_count: {
+				select: {
+					likes: true,
+					comments: true,
+				},
+			},
+		},
+		where: {
+			author_id: userId,
+		},
+		orderBy: {
+			created_at: 'desc',
+		},
+	});
+
+	return posts;
+};

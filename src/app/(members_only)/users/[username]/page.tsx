@@ -1,4 +1,6 @@
 import { Profile } from '@/components/common';
+import { PostItem } from '@/components/post';
+import { getPostsByUserId } from '@/services/post';
 import { getUserByUsername } from '@/services/user';
 
 interface UserDetailProps {
@@ -10,6 +12,7 @@ interface UserDetailProps {
 export default async function UserDetail({ params }: UserDetailProps) {
 	const { username } = await params;
 	const userInfo = await getUserByUsername(username);
+	const posts = await getPostsByUserId(userInfo.id);
 
 	return (
 		<>
@@ -24,15 +27,25 @@ export default async function UserDetail({ params }: UserDetailProps) {
 					<p className='text-sm text-grey-light'>{userInfo.bio}</p>
 				)}
 			</section>
-			<section className='pb-20'>
-				<ul className='flex h-8 border-b border-b-grey-lightest'>
-					<li className='flex-1 flex items-center justify-center text-sm text-grey-light'>
-						Posts
-					</li>
-					<li className='flex-1 flex items-center justify-center text-sm text-grey-light'>
-						Likes
-					</li>
-				</ul>
+			<section className='pt-4 pb-20'>
+				{posts.length > 0 ? (
+					<>
+						{posts.map((post) => (
+							<PostItem
+								post_id={post.id}
+								content={post.content}
+								author={post.author}
+								created_at={post.created_at}
+								_count={post._count}
+								key={post.id}
+							/>
+						))}
+					</>
+				) : (
+					<p className='text-xs text-grey-light px-6 text-center'>
+						{username} hasn&apos;t written any posts yet.
+					</p>
+				)}
 			</section>
 		</>
 	);
